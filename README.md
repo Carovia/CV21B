@@ -1,5 +1,9 @@
 # CV21B
 
+## Programming01 图像分类
+- 将数据集解压放在Programming01目录下即可
+
+## Programming02 目标检测
 - 核心代码参考
   - https://github.com/lufficc/SSD.git
 - 使用提示
