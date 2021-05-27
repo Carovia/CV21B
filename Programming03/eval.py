@@ -40,14 +40,17 @@ def cal_mAcc(confusion_matrix):
 
 
 def evaluate(loader, num_class):
+    c_mtxs = []
     for (pred, gt) in tqdm(loader):
         mask = (gt >= 0) & (gt < num_class)
         label = num_class * gt[mask].astype('int') + pred[mask]
         count = np.bincount(label, minlength=num_class ** 2)
         confusion_matrix = count.reshape(num_class, num_class)
-        pacc = cal_pixelAcc(confusion_matrix)
-        macc = cal_mAcc(confusion_matrix)
-        miou = cal_mIOU(confusion_matrix)
+        c_mtxs.append(confusion_matrix)
+    c_mtxs = np.sum(np.array(c_mtxs), axis=0)
+    pacc = cal_pixelAcc(c_mtxs)
+    macc = cal_mAcc(c_mtxs)
+    miou = cal_mIOU(c_mtxs)
 
     print('[Eval Summary]:')
     print('Mean IoU: {:.4f}'.format(miou))
