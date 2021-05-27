@@ -13,3 +13,9 @@
     提取码：m2d0 
     复制这段内容后打开百度网盘手机App，操作更方便哦--来自百度网盘超级会员V1的分享
 
+## Programming03 语义识别
+- 核心代码参考
+  - https://github.com/jfzhang95/pytorch-deeplab-xception
+- 使用说明
+  - 参考：https://blog.csdn.net/yx868yx/article/details/113778713
+  - 数据集需要按照VOC格式准备
