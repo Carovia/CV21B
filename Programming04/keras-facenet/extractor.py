@@ -1,6 +1,6 @@
 from PIL import Image
-from numpy import asarray, savez_compressed
 from mtcnn.mtcnn import MTCNN
+from numpy import asarray, savez_compressed
 import os
 
 
@@ -31,7 +31,12 @@ def load_faces(directory):
     faces = list()
     for filename in os.listdir(directory):
         path = os.path.join(directory, filename)
-        face = extract_face(path)
+        try:
+            face = extract_face(path)
+            print("Finish extracting face from image %s" % filename)
+        except IndexError:
+            print("No faces detected in image %s" % filename)
+            continue
         faces.append(face)
     return faces
 
@@ -49,8 +54,17 @@ def load_dataset(directory):
     return asarray(x), asarray(y)
 
 
-train_x, train_y = load_dataset('data/gallery')
-print(train_x.shape, train_y.shape)
-test_x, test_y = load_dataset('data/val')
-print(test_x.shape, test_y.shape)
-savez_compressed('cv21b-dataset.npz', train_x, train_y, test_x, test_y)
+def process(data_path, data_type):
+    data_x, data_y = load_dataset(data_path)
+    print("Embedded Data:", data_x.shape, data_y.shape)
+    savez_compressed('result/cv21b-%s.npz' % data_type, data_x, data_y)
+
+
+# process('data/train-0', 'train-0')
+# process('data/train-1', 'train-1')
+# process('data/train-2', 'train-2')
+# process('data/train-3', 'train-3')
+# process('data/train-4', 'train-4')
+process('data/gallery', 'gallery')
+process('data/val', 'val')
+# process('data/test', 'test')

@@ -18,7 +18,7 @@ def cal_acc(gt, pr):
 
 
 gt_path = 'data/val_label.txt'
-pr_path = 'data/val_result.txt'
+pr_path = 'result/val_result.txt'
 gt = load_res(gt_path)
 pr = load_res(pr_path)
 print('ACC: %.4f' % cal_acc(gt, pr))

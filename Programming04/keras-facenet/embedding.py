@@ -1,7 +1,4 @@
-from numpy import load
-from numpy import expand_dims
-from numpy import asarray
-from numpy import savez_compressed
+from numpy import load, expand_dims, asarray, savez_compressed
 from keras.models import load_model
 
 
@@ -18,25 +15,30 @@ def get_embedding(model, face_pixels):
     return yhat[0]
 
 
-# 加载数据集
-data = load('cv21b-dataset.npz')
-train_x, train_y, test_x, test_y = data['arr_0'], data['arr_1'], data['arr_2'], data['arr_3']
-print('Loaded: ', train_x.shape, train_y.shape, test_x.shape, test_y.shape)
+# 加载数据并转化为向量
+def transform(data_path, data_type, model):
+    data = load(data_path)
+    data_x, data_y = data['arr_0'], data['arr_1']
+    print('Loaded Data:', data_x.shape, data_y.shape)
+    new_data_x = list()
+    for pixels in data_x:
+        embedding = get_embedding(model, pixels)
+        new_data_x.append(embedding)
+    new_data_x = asarray(new_data_x)
+    print('Embedded Data:', new_data_x.shape)
+    save_name = 'result/cv21b-' + data_type + '-embedded.npz'
+    savez_compressed(save_name, new_data_x, data_y)
+
+
 # 加载 facenet 模型
-model = load_model('facenet_keras.h5')
+my_model = load_model('model/facenet_inception_resnet_v1.h5')
 print('Loaded Model')
-# 将训练集中每一张脸转化为向量
-new_train_x = list()
-for pixels in train_x:
-    embedding = get_embedding(model, pixels)
-    new_train_x.append(embedding)
-new_train_x = asarray(new_train_x)
-print(new_train_x.shape)
-# 将测试（验证）集中每一张脸转化为向量
-new_test_x = list()
-for pixels in test_x:
-    embedding = get_embedding(model, pixels)
-    new_test_x.append(embedding)
-new_test_x = asarray(new_test_x)
-print(new_test_x.shape)
-savez_compressed('cv21b-embeddings.npz', new_train_x, train_y, new_test_x, test_y)
+
+# transform('result/cv21b-train.npz', 'train', my_model)
+transform('result/cv21b-gallery.npz', 'gallery', my_model)
+transform('result/cv21b-val.npz', 'val', my_model)
+# transform('result/cv21b-test.npz', 'test', my_model)
+
+# 16: 0.9539
+# 99: 0.9087
+# all: 0.8307

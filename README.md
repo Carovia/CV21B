@@ -23,8 +23,9 @@
 - 实现参考
   - https://machinelearningmastery.com/how-to-develop-a-face-recognition-system-using-facenet-in-keras-and-an-svm-classifier/
 - 使用提示
-  - 下载预训练模型到 keras-facenet 目录下
-    - 链接：https://pan.baidu.com/s/1gUHJkwlRUW0Jg3PPsv_lAA 
-    - 提取码：8jow
-  - 图像数据解压到 keras-facenet/data 目录下
+  - 下载预训练模型到 keras-facenet/model 目录下
+    - 链接：https://pan.baidu.com/s/1MqvStlnv2-yhAIkqH7gtLQ
+    - 提取码：h808
+  - 图像数据解压到 keras-facenet/data 目录下，可以使用 prepare.py 将图片存放到同名文件夹下
   - 依次执行 extractor.py embedding.py classify.py 文件即可
+  - 结果文件在 keras-facenet/result 目录
