@@ -29,3 +29,7 @@
   - 图像数据解压到 keras-facenet/data 目录下，可以使用 prepare.py 将图片存放到同名文件夹下
   - 依次执行 extractor.py embedding.py classify.py 文件即可
   - 结果文件在 keras-facenet/result 目录
+
+## Programming05 光学字符识别
+
+## Programming06 单目标跟踪
