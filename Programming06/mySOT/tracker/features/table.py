@@ -111,10 +111,8 @@ class TableFeature(Feature):
         intImage = self.integral_vec_image(features)
         i1 = np.arange(region_size, features.shape[0] + 1, region_size).reshape(-1, 1)
         i2 = np.arange(region_size, features.shape[1] + 1, region_size).reshape(1, -1)
-        region_image = (intImage[i1, i2, :] - intImage[i1, i2 - region_size, :] - intImage[i1 - region_size, i2,
-                                                                                  :] + intImage[i1 - region_size,
-                                                                                       i2 - region_size, :]) / (
-                                   region_area * maxval)
+        region_image = (intImage[i1, i2, :] - intImage[i1, i2 - region_size, :] - intImage[i1 - region_size, i2, :]
+                        + intImage[i1 - region_size, i2 - region_size, :]) / (region_area * maxval)
         return region_image
 
     def get_features(self, img, pos, sample_sz, scales, normalization=True):

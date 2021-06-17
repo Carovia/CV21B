@@ -33,3 +33,16 @@
 ## Programming05 光学字符识别
 
 ## Programming06 单目标跟踪
+- 实现参考
+  - https://github.com/fengyang95/pyCFTrackers
+  - https://github.com/uoip/KCFpy
+  - https://github.com/chuanqi305/KCF
+- 数据下载
+  - 链接：https://pan.baidu.com/s/1S1gZqqC197NLlq5WO3OvPQ
+  - 提取码：ax3q
+- 运行方法
+  - 下载代码后进入Programming06的目录，将图像数据解压到data目录下
+  - 运行mySOT.demo可以生成响应的预测文件
+    - 可以根据需要修改路径参数，例如tracker、图像路径等
+  - 运行eval.py可以查看准确性
+    - result文件夹下有使用不同算法的已经打包的结果集，将其复制到上一级目录（result/）下即可直接运行eval.py

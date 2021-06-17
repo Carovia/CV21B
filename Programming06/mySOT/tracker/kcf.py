@@ -4,7 +4,7 @@ from mySOT.tracker.utils import cos_window, gaussian2d_rolled_labels, fft2, ifft
 
 
 class KCF:
-    def __init__(self, padding=1.5, features='hog', kernel='gaussian'):
+    def __init__(self, padding=1.5, features='color', kernel='gaussian'):
         self.padding = padding
         self._lambda = 1e-4
         self.features = features
@@ -23,6 +23,7 @@ class KCF:
         else:
             raise NotImplementedError
 
+    # 初始化参数、图像选择框和特征等
     def init(self, first_frame, bbox):
         assert len(first_frame.shape) == 3 and first_frame.shape[2] == 3
         if self.features == 'gray':
@@ -54,6 +55,7 @@ class KCF:
         self.init_response_center = (0, 0)
         self.alphaf = self._training(self.xf, self.yf)
 
+    # 更新下一帧的目标选择框
     def update(self, current_frame):
         assert len(current_frame.shape) == 3 and current_frame.shape[2] == 3
         if self.features == 'gray':
@@ -61,7 +63,7 @@ class KCF:
         if self.features == 'color' or self.features == 'gray':
             current_frame = current_frame.astype(np.float32) / 255
             z = self._crop(current_frame, self._center, (self.w, self.h))
-            z = z-np.mean(z)
+            z = z - np.mean(z)
         elif self.features == 'hog':
             z = self._crop(current_frame, self._center, (self.w, self.h))
             z = cv2.resize(z, (self.window_size[0] * self.cell_size, self.window_size[1] * self.cell_size))
@@ -69,9 +71,11 @@ class KCF:
         else:
             raise NotImplementedError
 
+        # 计算特征和相似性
         zf = fft2(self._get_windowed(z, self._window))
         responses = self._detection(self.alphaf, self.xf, zf, kernel=self.kernel)
 
+        # 更新中心点位置
         curr = np.unravel_index(np.argmax(responses, axis=None), responses.shape)
 
         if curr[0]+1 > self.window_size[1]/2:
@@ -88,6 +92,7 @@ class KCF:
         y_c += dy
         self._center = (np.floor(x_c), np.floor(y_c))
 
+        # 更新参数
         if self.features == 'color' or self.features == 'gray':
             new_x = self._crop(current_frame, self._center, (self.w, self.h))
         elif self.features == 'hog':
@@ -99,7 +104,7 @@ class KCF:
         new_xf = fft2(self._get_windowed(new_x, self._window))
         self.alphaf = self.interp_factor * self._training(new_xf, self.yf, kernel=self.kernel) + (1 - self.interp_factor) * self.alphaf
         self.xf = self.interp_factor * new_xf + (1 - self.interp_factor) * self.xf
-        return int(self._center[0] - self.w / 2), int(self._center[1] - self.h / 2), self.w, self.h
+        return self._center[0] - self.w / 2, self._center[1] - self.h / 2, self.w, self.h
 
     # 滤波相关计算
     def _kernel_correlation(self, xf, yf, kernel):

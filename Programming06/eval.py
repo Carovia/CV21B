@@ -157,9 +157,9 @@ import argparse
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description='Get metrics from GT and submission')
-    p.add_argument('--GT_zip', type=str, default='/home/magus/heyq-workspace/datasets/test/test_private.zip',
+    p.add_argument('--GT_zip', type=str, default='result/gt.zip',
                    help='zipped folder with GT OTB tracking bounding boxes.')
-    p.add_argument('--subm_zip', type=str, default='/home/magus/heyq-workspace/datasets/test/test_private.zip',
+    p.add_argument('--subm_zip', type=str, default='result/test.zip',
                    help='zipped folder with submitted OTB tracking bounding boxes.')
 
     args = p.parse_args()

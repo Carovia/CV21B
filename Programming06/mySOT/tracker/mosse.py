@@ -29,7 +29,7 @@ class MOSSE:
             self._Ai += self._G * np.conj(Fi)
             self._Bi += Fi * np.conj(Fi)
 
-    def update(self, current_frame, vis=False):
+    def update(self, current_frame):
         if len(current_frame.shape) != 2:
             assert current_frame.shape[2] == 3
             current_frame = cv2.cvtColor(current_frame, cv2.COLOR_BGR2GRAY)
@@ -39,8 +39,6 @@ class MOSSE:
         fi = self._preprocessing(fi, self.cos_window)
         Gi = Hi * np.fft.fft2(fi)
         gi = np.real(np.fft.ifft2(Gi))
-        if vis is True:
-            self.score = gi
         curr = np.unravel_index(np.argmax(gi, axis=None), gi.shape)
         dy, dx = curr[0] - (self.h / 2), curr[1] - (self.w / 2)
         x_c, y_c = self._center
@@ -52,7 +50,7 @@ class MOSSE:
         Fi = np.fft.fft2(fi)
         self._Ai = self.interp_factor * (self._G * np.conj(Fi)) + (1 - self.interp_factor) * self._Ai
         self._Bi = self.interp_factor * (Fi * np.conj(Fi)) + (1 - self.interp_factor) * self._Bi
-        return int(self._center[0] - self.w / 2), int(self._center[1] - self.h / 2), self.w, self.h
+        return self._center[0] - self.w / 2, self._center[1] - self.h / 2, self.w, self.h
 
     def _preprocessing(self, img, cos_window, eps=1e-5):
         img = np.log(img + 1)
