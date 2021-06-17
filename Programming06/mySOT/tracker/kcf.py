@@ -4,7 +4,7 @@ from mySOT.tracker.utils import cos_window, gaussian2d_rolled_labels, fft2, ifft
 
 
 class KCF:
-    def __init__(self, padding=1.5, features='color', kernel='gaussian'):
+    def __init__(self, padding=1.5, features='hog', kernel='gaussian'):
         self.padding = padding
         self._lambda = 1e-4
         self.features = features

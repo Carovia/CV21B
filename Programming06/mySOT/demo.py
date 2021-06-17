@@ -28,7 +28,7 @@ def track(image_dir, tracker, res_path):
         frame = cv2.imread(os.path.join(image_dir, image))
         x, y, w, h = tracker.update(frame)
         print(image, x, y, w, h)
-        f.write('%f,%f,%f,%f,%f,%f,%f,%f\n' % (x, y, x+w, y, x+w, y+h, x, y+h))
+        f.write('%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n' % (x, y, x+w, y, x+w, y+h, x, y+h))
         cv2.rectangle(frame, (int(x), int(y)), (int(x + w), int(y + h)), (0, 255, 255), 1)
         cv2.imshow('tracking', frame)
         cv2.waitKey(1)
